@@ -67,8 +67,8 @@ class Wp_Rest_User {
 	 * @since    1.1.0
 	 */
 	public function __construct() {
-		if (defined('PLUGIN_NAME_VERSION')) {
-			$this->version = PLUGIN_NAME_VERSION;
+		if (defined('WP_REST_USER_VERSION')) {
+			$this->version = WP_REST_USER_VERSION;
 		} else {
 			$this->version = '1.1.0';
 		}
