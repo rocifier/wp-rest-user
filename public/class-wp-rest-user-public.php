@@ -184,7 +184,28 @@ class Wp_Rest_User_Public {
 		}
 
 		// run the action
-		do_action('retrieve_password', $user_login);
+		// ==============================================================
+//do_action('retrieve_password', $user_login);
+$user = null;
+$email = "";
+if ( strpos( $user_login, '@' ) ) {
+  $user = get_user_by('email', $user_login);
+  $email = $user_login;
+} else {
+  $user = get_user_by('login', $user_login);
+  $email = $user->user_email;
+}
+$key = get_password_reset_key( $user );
+$rp_link = '<a href="' . site_url()."/wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login) . '">' . site_url()."/wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login) . '';
+
+function wpdocs_set_html_mail_content_type() {
+    return 'text/html';
+}
+add_filter( 'wp_mail_content_type', 'wpdocs_set_html_mail_content_type' );
+wp_mail($email, 'Reset password', 'Click here in order to reset your password:<br><br>'.$rp_link);
+// Reset content-type to avoid conflicts -- https://core.trac.wordpress.org/ticket/23578
+remove_filter( 'wp_mail_content_type', 'wpdocs_set_html_mail_content_type' );
+// ==============================================================
 
 		$response['code'] = 200;
 		$response['message'] = __("Reset Password link had been send to your email.", "wp-rest-user");
