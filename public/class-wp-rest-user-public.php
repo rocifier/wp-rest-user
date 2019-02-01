@@ -132,7 +132,7 @@ class Wp_Rest_User_Public {
 				// Ger User Meta Data (Sensitive, Password included. DO NOT pass to front end.)
 				$user = get_user_by('id', $user_id);
 				$user->set_role($role);
-				// $user->set_role('subscriber');
+				do_action( 'wp_rest_user_create_user', $user );
 
 				// Ger User Data (Non-Sensitive, Pass to front end.)
 				$response['code'] = 200;
